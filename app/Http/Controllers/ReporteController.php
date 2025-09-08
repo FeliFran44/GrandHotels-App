@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 use App\Models\Hotel;
 use App\Models\Accidente;
@@ -46,7 +45,7 @@ class ReporteController extends Controller
 
         $reportData = $this->buildReportData($hotelId, $start, $end);
 
-        $pdf = Pdf::loadView('reportes.pdf', [
+        $pdf = app('dompdf.wrapper')->loadView('reportes.pdf', [
             'reportData' => $reportData,
             'generatedAt' => Carbon::now('America/Montevideo'),
             'filters' => [
