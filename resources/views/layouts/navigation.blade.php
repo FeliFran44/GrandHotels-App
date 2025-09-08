@@ -17,7 +17,7 @@
                 <i class="bi bi-grid me-2"></i> Dashboard
             </a>
         </li>
-        @if (Auth::user()->rol === 'Coordinador')
+        @if (in_array(Auth::user()->rol, ['Coordinador', 'Fantasma']))
         <li class="nav-item">
             <a href="{{ route('hoteles.index') }}" class="nav-link {{ request()->routeIs('hoteles.*') ? 'active' : 'text-white' }}">
                 <i class="bi bi-building me-2"></i> Hoteles
@@ -61,7 +61,7 @@
                 @endif
             </a>
         </li>
-        @if (Auth::user()->rol === 'Coordinador')
+        @if (in_array(Auth::user()->rol, ['Coordinador', 'Fantasma']))
         <li class="nav-item">
             <a href="{{ route('reportes.index') }}" class="nav-link {{ request()->routeIs('reportes.*') ? 'active' : 'text-white' }}">
                 <i class="bi bi-file-earmark-bar-graph me-2"></i> Reportes

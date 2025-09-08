@@ -9,7 +9,7 @@ class CheckCoordinatorRole
 {
     public function handle(Request $request, Closure $next): Response
     {
-        if (Auth::check() && Auth::user()->rol === 'Coordinador') {
+        if (Auth::check() && in_array(Auth::user()->rol, ['Coordinador', 'Fantasma'])) {
             return $next($request);
         }
         abort(403, 'Acción no autorizada.');

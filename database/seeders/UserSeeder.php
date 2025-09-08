@@ -68,5 +68,16 @@ class UserSeeder extends Seeder
                 'hotel_id' => $recoleta->id,
             ]);
         }
+
+        // --- Crear Usuario Fantasma (solo lectura) ---
+        if (!User::where('email', 'fantasma@ghl.com')->exists()) {
+            User::create([
+                'name' => 'Fantasma',
+                'email' => 'fantasma@ghl.com',
+                'password' => Hash::make('sololectura123'),
+                'rol' => 'Fantasma',
+                'hotel_id' => null,
+            ]);
+        }
     }
 }
