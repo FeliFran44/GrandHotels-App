@@ -63,6 +63,11 @@
         </li>
         @if (Auth::user()->rol === 'Coordinador')
         <li class="nav-item">
+            <a href="{{ route('reportes.index') }}" class="nav-link {{ request()->routeIs('reportes.*') ? 'active' : 'text-white' }}">
+                <i class="bi bi-file-earmark-bar-graph me-2"></i> Reportes
+            </a>
+        </li>
+        <li class="nav-item">
             <a href="{{ route('archivo-general.index') }}" class="nav-link {{ request()->routeIs('archivo-general.*') ? 'active' : 'text-white' }}">
                 <i class="bi bi-archive-fill me-2"></i> Archivo General
             </a>
