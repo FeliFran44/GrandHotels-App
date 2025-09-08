@@ -1,0 +1,52 @@
+/* Estilo General */
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: #f1f5f9; /* Color de fondo para el contenido */
+}
+
+.page-wrapper {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* Sidebar */
+.sidebar {
+    width: 280px;
+    flex-shrink: 0; /* Evita que el sidebar se encoja */
+    background-color: #1e293b;
+    color: #f8f9fa;
+    display: flex;
+    flex-direction: column;
+    padding: 1.5rem;
+}
+
+.sidebar-header {
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #334155;
+}
+
+.sidebar .nav-link {
+    font-size: 1rem;
+    padding: 12px 15px;
+    border-radius: 8px;
+    margin-bottom: 5px;
+}
+
+.sidebar .nav-link.active {
+    background-color: #334155;
+}
+
+.sidebar .nav-link:hover {
+    background-color: #475569;
+}
+
+.sidebar .nav-link i {
+    font-size: 1.2rem;
+}
+
+/* Contenido Principal */
+.content-wrapper {
+    flex-grow: 1; /* Hace que esta sección ocupe todo el espacio restante */
+    overflow-y: auto; /* Agrega scroll si el contenido es muy largo */
+}
