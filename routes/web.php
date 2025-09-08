@@ -14,6 +14,7 @@ use App\Http\Controllers\VacacionController;
 use App\Http\Controllers\ArchivoGeneralController;
 use App\Http\Controllers\AuditLogController;
 use App\Http\Controllers\ChatController;
+use App\Http\Controllers\ReporteController;
 use App\Models\Comunicado;
 use App\Models\PersonalSeguridad;
 use App\Models\Hotel;
@@ -82,6 +83,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::resource('hoteles', HotelController::class);
         Route::get('/archivo-general', [ArchivoGeneralController::class, 'index'])->name('archivo-general.index');
         Route::get('/audit-log', [AuditLogController::class, 'index'])->name('audit-log.index');
+        Route::get('/reportes', [ReporteController::class, 'index'])->name('reportes.index');
+        Route::get('/reportes/exportar', [ReporteController::class, 'export'])->name('reportes.export');
     });
 
     // --- Rutas de Módulos ---
