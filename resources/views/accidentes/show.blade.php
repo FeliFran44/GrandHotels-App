@@ -12,7 +12,13 @@
         <div class="card-body p-4">
             <div class="row">
                 <div class="col-lg-8 border-end">
-                    <h4 class="mb-3"><span class="badge bg-{{ $accidente->tipo == 'Accidente' ? 'danger' : 'warning' }} fs-6 me-2">{{ $accidente->tipo }}</span>Descripción Detallada</h4>
+                    <h4 class="mb-3">
+                        <span class="badge bg-{{ $accidente->tipo == 'Accidente' ? 'danger' : 'warning' }} fs-6 me-2">{{ $accidente->tipo }}</span>
+                        <span class="badge bg-secondary me-2">{{ $accidente->categoria ?? 'Sin categoría' }}</span>
+                        @php $g=$accidente->gravedad; $cls=$g==='Alta'?'danger':($g==='Media'?'warning':'success'); @endphp
+                        <span class="badge bg-{{ $cls }} me-2">{{ $g ?? 'Gravedad no indicada' }}</span>
+                        Descripción Detallada
+                    </h4>
                     <p class="text-muted">{{ $accidente->descripcion }}</p>
                     <hr class="my-4">
                     <h5 class="mb-3">Personas Involucradas</h5>
@@ -21,7 +27,6 @@
                     <h5 class="mb-3">Acciones Tomadas</h5>
                     <p class="text-muted">{{ $accidente->acciones_tomadas ?? 'No se registraron acciones.' }}</p>
                     
-                    {{-- Sección para mostrar archivos adjuntos --}}
                     @if ($accidente->archivos->isNotEmpty())
                         <hr class="my-4">
                         <h5 class="mb-3">Archivos Adjuntos</h5>

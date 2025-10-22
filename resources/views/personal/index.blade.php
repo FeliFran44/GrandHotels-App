@@ -11,6 +11,12 @@
                     Ver Personal en Vivo
                 </a>
             @endif
+            @if(Auth::user()->rol === 'Gerente')
+                <a href="{{ route('personal.en-vivo-mi-hotel') }}" class="btn btn-info me-2">
+                    <i class="bi bi-broadcast me-1"></i>
+                    Ver Personal en Vivo
+                </a>
+            @endif
             <a href="{{ route('personal.create') }}" class="btn btn-primary">
                 <i class="bi bi-plus-lg me-1"></i>
                 Añadir Empleado

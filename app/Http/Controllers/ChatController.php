@@ -43,14 +43,18 @@ class ChatController extends Controller
             ->where('user_id', $otroParticipante->id)
             ->whereNull('leido_a')
             ->update(['leido_a' => Carbon::now()]);
-        
-        // Cargamos los mensajes con sus autores y sus archivos adjuntos
-        $conversacion->load('mensajes.user', 'mensajes.archivos');
+
+        // Paginamos mensajes (los más recientes primero) y luego invertimos en la vista si hace falta
+        $mensajes = $conversacion->mensajes()->with(['user','archivos'])
+            ->orderBy('created_at', 'desc')
+            ->paginate(50);
+        // Sobrescribimos la relación para que la vista actual (que usa $conversacion->mensajes) no cargue todo
+        $conversacion->setRelation('mensajes', $mensajes->getCollection());
 
         $usuariosParaChatear = ($usuarioActual->rol === 'Coordinador') 
             ? User::where('rol', 'Gerente')->orderBy('name')->get() 
             : User::where('rol', 'Coordinador')->get();
-        return view('chat.show', compact('conversacion', 'otroParticipante', 'usuariosParaChatear'));
+        return view('chat.show', compact('conversacion', 'otroParticipante', 'usuariosParaChatear', 'mensajes'));
     }
 
     public function storeMessage(Request $request, Conversacion $conversacion)

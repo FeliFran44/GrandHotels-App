@@ -17,6 +17,7 @@ class User extends Authenticatable
         'password',
         'rol',
         'hotel_id',
+        'permisos',
     ];
 
     protected $hidden = [
@@ -27,6 +28,7 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
+        'permisos' => 'array',
     ];
 
     public function comunicadosLeidos()

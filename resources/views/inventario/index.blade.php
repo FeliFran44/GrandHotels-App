@@ -42,8 +42,8 @@
                     <thead class="table-light"><tr><th>Nombre</th><th>Estado</th><th>Hotel</th><th>Próximo Mantenimiento</th><th>Acciones</th></tr></thead>
                     <tbody>
                         @forelse ($inventario as $item)
-                            <tr>
-                                <td>{{ $item->nombre }}</td>
+                            <tr style="cursor:pointer;" onclick="window.location='{{ route('inventario.show', $item) }}'">
+                                <td><a href="{{ route('inventario.show', $item) }}" class="text-decoration-none">{{ $item->nombre }}</a></td>
                                 <td>{{ $item->estado }}</td>
                                 <td>{{ $item->hotel->nombre }}</td>
                                 <td>{{ $item->proxima_fecha_mantenimiento ? $item->proxima_fecha_mantenimiento->format('d/m/Y') : 'N/A' }}</td>

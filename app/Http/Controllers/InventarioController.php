@@ -53,6 +53,14 @@ class InventarioController extends Controller
         Inventario::create($validatedData);
         return redirect()->route('inventario.index')->with('success', 'Ítem de inventario registrado.');
     }
+
+    public function show(Inventario $inventario)
+    {
+        $user = Auth::user();
+        if ($user->rol === 'Gerente' && $inventario->hotel_id != $user->hotel_id) { abort(403); }
+        $inventario->load('hotel');
+        return view('inventario.show', compact('inventario'));
+    }
     public function edit(Inventario $inventario) {
         $user = Auth::user();
         if ($user->rol === 'Gerente' && $inventario->hotel_id != $user->hotel_id) { abort(403); }

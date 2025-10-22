@@ -13,6 +13,10 @@
                 @endif
                 <div class="row">
                     <div class="col-md-6 mb-3"><label for="tipo" class="form-label">Tipo de Evento</label><select class="form-select" name="tipo" required>@foreach($tipos as $tipo)<option value="{{ $tipo }}">{{ $tipo }}</option>@endforeach</select></div>
+                    <div class="col-md-6 mb-3"><label for="categoria" class="form-label">Categoría</label><select class="form-select" name="categoria" required>@foreach($categorias as $cat)<option value="{{ $cat }}">{{ $cat }}</option>@endforeach</select></div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mb-3"><label for="gravedad" class="form-label">Gravedad</label><select class="form-select" name="gravedad" required>@foreach(($gravedades ?? []) as $g)<option value="{{ $g }}">{{ $g }}</option>@endforeach</select></div>
                     <div class="col-md-6 mb-3"><label for="fecha_evento" class="form-label">Fecha y Hora del Evento</label><input type="datetime-local" class="form-control" name="fecha_evento" required></div>
                 </div>
                 <div class="mb-3"><label for="descripcion" class="form-label">Descripción Detallada</label><textarea class="form-control" name="descripcion" rows="4" required></textarea></div>

@@ -14,6 +14,8 @@ use App\Models\Accidente;
 use App\Observers\AccidenteObserver;
 use App\Models\Comunicado;
 use App\Observers\ComunicadoObserver;
+use App\Models\Capacitacion;
+use App\Observers\CapacitacionObserver;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -39,5 +41,6 @@ class AppServiceProvider extends ServiceProvider
         Inventario::observe(InventarioObserver::class);
         Accidente::observe(AccidenteObserver::class);
         Comunicado::observe(ComunicadoObserver::class);
+        Capacitacion::observe(CapacitacionObserver::class);
     }
 }

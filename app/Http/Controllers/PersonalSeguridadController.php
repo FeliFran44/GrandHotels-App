@@ -85,6 +85,56 @@ class PersonalSeguridadController extends Controller
         
         return view('personal.en-vivo', compact('personalPorHotel'));
     }
+
+    /**
+     * Supervisión de Personal en vivo para Gerentes (solo su hotel).
+     */
+    public function enVivoHotel()
+    {
+        $user = Auth::user();
+        if (!$user || $user->rol !== 'Gerente') {
+            abort(403);
+        }
+
+        $ahora = Carbon::now(new \DateTimeZone('America/Montevideo'));
+        $horaActual = $ahora->format('H:i:s');
+        $diaDeLaSemanaActual = $ahora->dayOfWeekIso;
+        $diaDeLaSemanaAyer = $ahora->copy()->subDay()->dayOfWeekIso;
+        $fechaActual = $ahora->toDateString();
+
+        $personalActivo = PersonalSeguridad::with('hotel')
+            ->where('hotel_id', $user->hotel_id)
+            ->where(function ($q) use ($horaActual, $diaDeLaSemanaActual, $diaDeLaSemanaAyer) {
+                $q->where(function($sub) use ($horaActual, $diaDeLaSemanaActual){
+                    $sub->whereColumn('hora_entrada', '<=', 'hora_salida')
+                        ->whereTime('hora_entrada', '<=', $horaActual)
+                        ->whereTime('hora_salida', '>=', $horaActual)
+                        ->where(function ($q2) use ($diaDeLaSemanaActual) {
+                            $q2->whereNull('dias_libres')->orWhereRaw("FIND_IN_SET(?, dias_libres) = 0", [$diaDeLaSemanaActual]);
+                        });
+                });
+                $q->orWhere(function($sub) use ($horaActual, $diaDeLaSemanaActual, $diaDeLaSemanaAyer){
+                    $sub->whereColumn('hora_entrada', '>', 'hora_salida')
+                        ->where(function($sub2) use ($horaActual, $diaDeLaSemanaActual, $diaDeLaSemanaAyer){
+                            $sub2->whereTime('hora_salida', '>=', $horaActual)
+                                 ->where(function ($q2) use ($diaDeLaSemanaAyer) {
+                                     $q2->whereNull('dias_libres')->orWhereRaw("FIND_IN_SET(?, dias_libres) = 0", [$diaDeLaSemanaAyer]);
+                                 });
+                            $sub2->orWhereTime('hora_entrada', '<=', $horaActual)
+                                 ->where(function ($q2) use ($diaDeLaSemanaActual) {
+                                     $q2->whereNull('dias_libres')->orWhereRaw("FIND_IN_SET(?, dias_libres) = 0", [$diaDeLaSemanaActual]);
+                                 });
+                        });
+                });
+            })
+            ->whereDoesntHave('vacaciones', function ($q) use ($fechaActual) {
+                $q->where('fecha_inicio', '<=', $fechaActual)->where('fecha_fin', '>=', $fechaActual);
+            })
+            ->get();
+
+        $personalPorHotel = $personalActivo->groupBy('hotel.nombre');
+        return view('personal.en-vivo', compact('personalPorHotel'));
+    }
     
     /**
      * Muestra el formulario para crear un nuevo empleado.

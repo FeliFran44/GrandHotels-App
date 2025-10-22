@@ -8,6 +8,7 @@ use App\Http\Controllers\ComunicadoController;
 use App\Http\Controllers\InventarioController;
 use App\Http\Controllers\AccidenteController;
 use App\Http\Controllers\EventoController;
+use App\Http\Controllers\CapacitacionController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RespuestaController;
 use App\Http\Controllers\VacacionController;
@@ -81,20 +82,27 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // --- Grupo de rutas que SOLO el Coordinador puede ver ---
     Route::middleware('is.coordinator')->group(function () {
         Route::resource('hoteles', HotelController::class);
+        Route::resource('usuarios', \App\Http\Controllers\UsuariosController::class);
         Route::get('/archivo-general', [ArchivoGeneralController::class, 'index'])->name('archivo-general.index');
         Route::get('/audit-log', [AuditLogController::class, 'index'])->name('audit-log.index');
-        Route::get('/reportes', [ReporteController::class, 'index'])->name('reportes.index');
-        Route::get('/reportes/exportar', [ReporteController::class, 'export'])->name('reportes.export');
     });
 
     // --- Rutas de Módulos ---
     Route::get('/personal/en-vivo', [PersonalSeguridadController::class, 'enVivo'])->name('personal.en-vivo');
+    Route::get('/personal/en-vivo-mi-hotel', [PersonalSeguridadController::class, 'enVivoHotel'])->name('personal.en-vivo-mi-hotel');
     Route::resource('personal', PersonalSeguridadController::class);
     Route::resource('comunicados', ComunicadoController::class)->only(['index', 'create', 'store', 'show']);
     Route::resource('inventario', InventarioController::class);
     Route::resource('accidentes', AccidenteController::class);
     Route::resource('planificacion', EventoController::class);
     Route::get('/planificacion-feed', [EventoController::class, 'feed'])->name('planificacion.feed');
+    Route::resource('capacitaciones', CapacitacionController::class)->parameters(['capacitaciones' => 'capacitacion']);
+
+    // --- Reportes (Coordinador o usuarios con permiso 'reportes') ---
+    Route::middleware('can.section:reportes')->group(function () {
+        Route::get('/reportes', [ReporteController::class, 'index'])->name('reportes.index');
+        Route::get('/reportes/exportar', [ReporteController::class, 'export'])->name('reportes.export');
+    });
 
     // --- Rutas para el Chat Privado ---
     Route::get('/chat', [ChatController::class, 'index'])->name('chat.index');

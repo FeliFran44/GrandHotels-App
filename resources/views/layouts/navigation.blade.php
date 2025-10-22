@@ -12,43 +12,74 @@
     </div>
     
     <ul class="nav nav-pills flex-column" style="flex-grow: 1;">
+        
         <li class="nav-item">
             <a href="{{ route('dashboard') }}" class="nav-link {{ request()->routeIs('dashboard') ? 'active' : 'text-white' }}">
                 <i class="bi bi-grid me-2"></i> Dashboard
             </a>
-        </li>
+         </li>
         @if (Auth::user()->rol === 'Coordinador')
         <li class="nav-item">
             <a href="{{ route('hoteles.index') }}" class="nav-link {{ request()->routeIs('hoteles.*') ? 'active' : 'text-white' }}">
                 <i class="bi bi-building me-2"></i> Hoteles
             </a>
         </li>
+        <li class="nav-item">
+            <a href="{{ route('usuarios.index') }}" class="nav-link {{ request()->routeIs('usuarios.*') ? 'active' : 'text-white' }}">
+                <i class="bi bi-person-gear me-2"></i> Usuarios
+            </a>
+        </li>
         @endif
+        
+        @php
+            $__perms = (array) (Auth::user()->permisos ?? []);
+            $isCoordinator = Auth::user()->rol === 'Coordinador';
+            $can = function (string $section) use ($__perms, $isCoordinator) {
+                return $isCoordinator || in_array($section, $__perms, true);
+            };
+        @endphp
+        @if ($can('personal'))
         <li class="nav-item">
             <a href="{{ route('personal.index') }}" class="nav-link {{ request()->routeIs('personal.*') ? 'active' : 'text-white' }}">
                 <i class="bi bi-people me-2"></i> Personal
             </a>
-        </li>
-        <li class="nav-item">
+        </li> 
+        @endif
+         
+        @if ($can('comunicados'))
+        <li class="nav-item"> 
             <a href="{{ route('comunicados.index') }}" class="nav-link {{ request()->routeIs('comunicados.*') ? 'active' : 'text-white' }}">
                 <i class="bi bi-chat-left-text me-2"></i> Comunicados
             </a>
         </li>
+        @endif
+        @if ($can('planificacion'))
         <li class="nav-item">
     <a href="{{ route('planificacion.index') }}" class="nav-link {{ request()->routeIs('planificacion.*') ? 'active' : 'text-white' }}">
         <i class="bi bi-calendar-event me-2"></i> Planificación
     </a>
-</li>
+</li> 
+        @endif 
+        @if ($can('inventario'))
         <li class="nav-item">
             <a href="{{ route('inventario.index') }}" class="nav-link {{ request()->routeIs('inventario.*') ? 'active' : 'text-white' }}">
                 <i class="bi bi-tools me-2"></i> Inventario
             </a>
         </li>
+        @endif
+        @if ($can('accidentes'))
         <li class="nav-item">
             <a href="{{ route('accidentes.index') }}" class="nav-link {{ request()->routeIs('accidentes.*') ? 'active' : 'text-white' }}">
                 <i class="bi bi-exclamation-octagon me-2"></i> Accidentes
             </a>
         </li>
+        @endif
+        <li class="nav-item">
+            <a href="{{ route('capacitaciones.index') }}" class="nav-link {{ request()->routeIs('capacitaciones.*') ? 'active' : 'text-white' }}">
+                <i class="bi bi-mortarboard me-2"></i> Capacitaciones
+            </a>
+        </li>
+        @if ($can('chat'))
         <li class="nav-item">
             <a href="{{ route('chat.index') }}" class="nav-link {{ request()->routeIs('chat.*') ? 'active' : 'text-white' }} position-relative">
                 <i class="bi bi-chat-quote-fill me-2"></i> 
@@ -61,12 +92,16 @@
                 @endif
             </a>
         </li>
-        @if (Auth::user()->rol === 'Coordinador')
+        @endif
+
+        @if ($can('reportes'))
         <li class="nav-item">
             <a href="{{ route('reportes.index') }}" class="nav-link {{ request()->routeIs('reportes.*') ? 'active' : 'text-white' }}">
                 <i class="bi bi-file-earmark-bar-graph me-2"></i> Reportes
             </a>
         </li>
+        @endif
+        @if ($isCoordinator)
         <li class="nav-item">
             <a href="{{ route('archivo-general.index') }}" class="nav-link {{ request()->routeIs('archivo-general.*') ? 'active' : 'text-white' }}">
                 <i class="bi bi-archive-fill me-2"></i> Archivo General

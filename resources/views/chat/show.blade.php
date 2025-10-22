@@ -57,6 +57,11 @@
                     </div>
                 </div>
                 <div class="card-footer">
+                    @isset($mensajes)
+                    <div class="d-flex justify-content-center mb-2">
+                        {{ $mensajes->appends(request()->query())->links() }}
+                    </div>
+                    @endisset
                     <form action="{{ route('chat.storeMessage', $conversacion) }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         <div class="mb-2">

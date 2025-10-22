@@ -11,6 +11,8 @@ class Accidente extends Model
         'hotel_id', 
         'user_id', 
         'tipo', 
+        'categoria',
+        'gravedad',
         'fecha_evento', 
         'descripcion', 
         'involucrados', 
